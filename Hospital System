@@ -1,0 +1,202 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+هيكل بيانات لتخزين معلومات المريض //
+struct Patient
+{
+string name;
+int id;
+int age;
+string gender;
+string illness;
+string doctor;
+};
+class HospitalSystem
+{
+private:
+متغيرات عامة لتخزين البيانات //
+vector<Patient> patients;
+int nextId;
+public:
+HospitalSystem() : nextId(1) {}
+دالة لإضافة مريض جديد //
+void addPatient()
+{
+Patient p;
+cout << "--- Add New Patient ---" << endl;
+cout << "Enter name: ";
+cin.ignore();
+getline(cin, p.name);
+p.id = nextId++;
+cout << "Enter age: ";
+cin >> p.age;
+cout << "Enter gender: ";
+cin >> p.gender;
+cout << "Enter illness: ";
+cin.ignore();
+getline(cin, p.illness);
+p.doctor = "Not assigned";
+patients.push_back(p);
+cout << "Patient added successfully! ID: " << p.id << endl;
+}/
+دالة لعرض جميع المرضى /
+void displayAllPatients()
+{
+cout << "--- All Patients ---" << endl;
+if (patients.empty()){
+cout << "No patients found." << endl;
+return;
+}
+for (const Patient& p : patients)
+{
+cout << "ID: " << p.id << " | Name: " << p.name
+<< " | Age: " << p.age << " | Gender: " << p.gender
+<< " | Illness: " << p.illness << " | Doctor: " << p.doctor << endl;
+}
+}/
+دالة للبحث عن مريض /
+void searchPatient()
+{
+int choice;
+cout << "--- Search Patient ---" << endl;
+cout << "1. Search by ID\n2. Search by Name\nChoice: ";
+cin >> choice;
+البحث باستخدام الرقم التعريفي //
+if (choice == 1)
+{
+int id;
+cout << "Enter patient ID: ";
+cin >> id;
+البحث في قائمة المرضى //
+for (const Patient& p : patients)
+{
+if (p.id == id)
+{
+cout << "Patient found:" << endl;
+cout << "ID: " << p.id << " | Name: " << p.name
+<< " | Age: " << p.age << " | Gender: " << p.gender
+<< " | Illness: " << p.illness << " | Doctor: " << p.doctor
+<< endl;
+return;
+}
+}
+cout << "Patient with ID " << id << " not found." << endl;
+}
+البحث باستخدام الاسم //
+else if (choice == 2)
+{
+string name;
+cout << "Enter patient name: ";
+cin.ignore();
+getline(cin, name);
+bool found = false;
+البحث في قائمة المرضى //
+for (const Patient& p : patients)
+{
+if (p.name == name)
+{
+cout << "Patient found:" << endl;
+cout << "ID: " << p.id << " | Name: " << p.name
+<< " | Age: " << p.age << " | Gender: " << p.gender<< " | Illness: " << p.illness << " | Doctor: " << p.doctor
+<< endl;
+found = true;
+}
+}
+if (!found)
+{
+cout << "Patient with name '" << name << "' not found." << endl;
+}
+}
+}/
+دالة لتعيين طبيب لمريض /
+void assignDoctor()
+{
+int id;
+string doctor;
+cout << "--- Assign Doctor ---" << endl;
+cout << "Enter patient ID: ";
+cin >> id;
+البحث عن المريض باستخدام الرقم التعريفي //
+for (Patient& p : patients)
+{
+if (p.id == id)
+{
+cout << "Current patient: " << p.name << " | Illness: " << p.illness
+<< endl;
+cout << "Enter doctor's name: ";
+cin.ignore();
+getline(cin, doctor);
+p.doctor = doctor;
+cout << "Doctor " << doctor << " assigned to patient " << p.name <<
+endl;
+return;
+}
+}
+cout << "Patient with ID " << id << " not found." << endl;
+}
+دالة لحذف مريض //
+void deletePatient() {
+int id;
+cout << "--- Delete Patient ---" << endl;
+cout << "Enter patient ID to delete: ";
+cin >> id;
+البحث عن المريض في القائمة //
+for (auto it = patients.begin(); it != patients.end(); ++it)
+{
+if (it->id == id)
+{
+cout << "Deleting patient: " << it->name << endl;
+patients.erase(it);
+cout << "Patient deleted successfully." << endl;
+return;
+}
+}
+cout << "Patient with ID " << id << " not found." << endl;
+}دالة لعرض القائمة الرئيسية //
+void showMenu() {
+cout << "----------------------------------" << endl;
+cout << "=== Hospital Management System ===" << endl;
+cout << "1. Add Patient" << endl;
+cout << "2. View All Patients" << endl;
+cout << "3. Search Patient" << endl;
+cout << "4. Assign Doctor" << endl;
+cout << "5. Delete Patient" << endl;
+cout << "6. Exit" << endl;
+cout << "Choose an option: ";
+}
+void run()
+{
+int choice;
+do
+{
+showMenu();
+cin >> choice;
+تنفيذ الوظيفة بناء على اختيار المستخدم //
+switch (choice)
+{
+case 1: addPatient();
+break;
+case 2: displayAllPatients();
+break;
+case 3: searchPatient();
+break;
+case 4: assignDoctor();
+break;
+case 5: deletePatient();
+break;
+case 6: cout << "Goodbye!🤝" << endl;
+cout << "I wish you a speedy recovery😊"
+break;
+default: cout << "Invalid choice! Try again." << endl;
+}
+} while (choice != 6);
+}
+};
+int main()
+{
+HospitalSystem hospital;
+hospital.run();
+return 0;
+}
+_______________
